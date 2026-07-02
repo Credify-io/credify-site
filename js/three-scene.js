@@ -178,140 +178,314 @@ function cardBase(ctx) {
   roundRectPath(ctx, 0, 0, TEX_W, TEX_H, TEX_R);
   ctx.save();
   ctx.clip();
-  // matte graphite black (Centurion-style), whisper of emerald kept for brand
+
+  // matte anthracite base
   const g = ctx.createLinearGradient(0, 0, TEX_W, TEX_H);
-  g.addColorStop(0, '#1d201f');
-  g.addColorStop(0.45, '#101211');
+  g.addColorStop(0, '#202322');
+  g.addColorStop(0.45, '#111312');
   g.addColorStop(1, '#0a0b0b');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
+
+  // vertical brushed-metal micro-grain
+  ctx.globalAlpha = 0.05;
+  for (let x = 0; x < TEX_W; x += 3) {
+    const a = 0.02 + ((x * 7919) % 13) / 13 * 0.05;
+    ctx.fillStyle = 'rgba(255,255,255,' + a.toFixed(3) + ')';
+    ctx.fillRect(x, 0, 1, TEX_H);
+  }
+  ctx.globalAlpha = 1;
+
+  // rosette guilloche: two overlapping ring families (currency moire)
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(255,255,255,0.020)';
+  for (let r = 60; r < 900; r += 26) {
+    ctx.beginPath(); ctx.arc(-140, TEX_H * 0.5, r, 0, 6.2832); ctx.stroke();
+    ctx.beginPath(); ctx.arc(TEX_W + 140, TEX_H * 0.5, r, 0, 6.2832); ctx.stroke();
+  }
+
+  // whisper of brand emerald, top-right
   const rg = ctx.createRadialGradient(TEX_W * 0.9, TEX_H * 0.05, 40, TEX_W * 0.9, TEX_H * 0.05, 620);
-  rg.addColorStop(0, 'rgba(167,243,208,0.12)');
+  rg.addColorStop(0, 'rgba(167,243,208,0.10)');
   rg.addColorStop(1, 'rgba(167,243,208,0)');
   ctx.fillStyle = rg;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
-  // fine engraved guilloche: sparse diagonal micro-lines
-  ctx.strokeStyle = 'rgba(255,255,255,0.022)';
-  ctx.lineWidth = 1;
-  for (let x = -TEX_H; x < TEX_W; x += 14) {
-    ctx.beginPath();
-    ctx.moveTo(x, TEX_H);
-    ctx.lineTo(x + TEX_H, 0);
-    ctx.stroke();
-  }
+
   // diagonal specular band
   const sg = ctx.createLinearGradient(0, TEX_H, TEX_W, 0);
   sg.addColorStop(0.42, 'rgba(255,255,255,0)');
-  sg.addColorStop(0.5, 'rgba(255,255,255,0.09)');
+  sg.addColorStop(0.5, 'rgba(255,255,255,0.08)');
   sg.addColorStop(0.58, 'rgba(255,255,255,0)');
   ctx.fillStyle = sg;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
+
+  // corner vignette for physical presence
+  const vg = ctx.createRadialGradient(TEX_W / 2, TEX_H / 2, TEX_H * 0.42, TEX_W / 2, TEX_H / 2, TEX_W * 0.72);
+  vg.addColorStop(0, 'rgba(0,0,0,0)');
+  vg.addColorStop(1, 'rgba(0,0,0,0.42)');
+  ctx.fillStyle = vg;
+  ctx.fillRect(0, 0, TEX_W, TEX_H);
+
   ctx.restore();
-  // hairline rim
+
+  // double coin-edge rim
   roundRectPath(ctx, 1.5, 1.5, TEX_W - 3, TEX_H - 3, TEX_R - 1);
   ctx.strokeStyle = 'rgba(255,255,255,0.30)';
   ctx.lineWidth = 3;
   ctx.stroke();
+  roundRectPath(ctx, 8, 8, TEX_W - 16, TEX_H - 16, TEX_R - 7);
+  ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
 }
 
-/* Engraved centurion emblem - stylized crested bust, drawn as layered
-   low-contrast strokes so it reads like etched metal at card scale. */
-function drawCenturion(ctx, cx, cy) {
+/* Engraved centurion - classical left-facing profile bust with crested
+   galea, rendered as a single clean silhouette with engraved interior
+   linework over a currency-style sunburst. */
+function drawCenturion(ctx, cx, cy, scale) {
   ctx.save();
   ctx.translate(cx, cy);
+  ctx.scale(scale, scale);
 
-  // engraved concentric rings behind the bust
+  // --- backdrop: sunburst rays + concentric rings ---
+  ctx.strokeStyle = 'rgba(255,255,255,0.022)';
+  ctx.lineWidth = 1;
+  for (let a = 0; a < 360; a += 6) {
+    const rad = a * Math.PI / 180;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(rad) * 100, Math.sin(rad) * 100);
+    ctx.lineTo(Math.cos(rad) * 225, Math.sin(rad) * 225);
+    ctx.stroke();
+  }
   ctx.strokeStyle = 'rgba(255,255,255,0.030)';
-  ctx.lineWidth = 1.2;
-  for (let r = 70; r <= 215; r += 16) {
+  for (let r = 96; r <= 214; r += 18) {
     ctx.beginPath(); ctx.arc(0, 0, r, 0, 6.2832); ctx.stroke();
   }
-
-  const fill = 'rgba(255,255,255,0.085)';
-  const rim = 'rgba(255,255,255,0.22)';
-
-  // helmet crest: thick arc band over the head
-  ctx.beginPath();
-  ctx.arc(0, -6, 96, Math.PI * 1.12, Math.PI * 1.92);
-  ctx.strokeStyle = 'rgba(255,255,255,0.10)';
-  ctx.lineWidth = 30;
-  ctx.stroke();
-  // crest plume lines fanning through the band
-  ctx.strokeStyle = 'rgba(255,255,255,0.20)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.09)';
   ctx.lineWidth = 2;
-  for (let a = 1.16; a <= 1.88; a += 0.075) {
-    const ang = Math.PI * a;
+  ctx.beginPath(); ctx.arc(0, 0, 158, 0, 6.2832); ctx.stroke();
+
+  const SILHOUETTE = 'rgba(255,255,255,0.085)';
+  const LINE = 'rgba(255,255,255,0.22)';
+  const RIM = 'rgba(255,255,255,0.5)';
+
+  // --- crest tail: plume ribbon falling behind the neck ---
+  ctx.beginPath();
+  ctx.moveTo(56, -64);
+  ctx.bezierCurveTo(102, -34, 114, 32, 94, 96);
+  ctx.bezierCurveTo(86, 52, 72, 8, 46, -32);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < 4; i++) {
     ctx.beginPath();
-    ctx.moveTo(Math.cos(ang) * 80, -6 + Math.sin(ang) * 80);
-    ctx.lineTo(Math.cos(ang) * 113, -6 + Math.sin(ang) * 113);
+    ctx.moveTo(52 + i * 5, -52 + i * 7);
+    ctx.bezierCurveTo(86 + i * 7, -20 + i * 9, 98 + i * 5, 28 + i * 11, 88 + i * 2, 86 + i * 3);
     ctx.stroke();
   }
-  // crest tail falling behind the neck
-  ctx.beginPath();
-  ctx.moveTo(88, -30);
-  ctx.quadraticCurveTo(112, 30, 96, 92);
-  ctx.quadraticCurveTo(88, 40, 74, 4);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(255,255,255,0.07)';
-  ctx.fill();
 
-  // head + helmet dome
+  // --- crest: plume band arcing over the helmet ---
+  const crestGrad = ctx.createLinearGradient(0, -128, 0, -40);
+  crestGrad.addColorStop(0, 'rgba(255,255,255,0.15)');
+  crestGrad.addColorStop(1, 'rgba(255,255,255,0.05)');
   ctx.beginPath();
-  ctx.ellipse(0, -14, 54, 64, 0, 0, 6.2832);
-  ctx.fillStyle = fill;
+  ctx.arc(4, -14, 112, Math.PI * 1.06, Math.PI * 1.98);
+  ctx.arc(4, -14, 70, Math.PI * 1.98, Math.PI * 1.06, true);
+  ctx.closePath();
+  ctx.fillStyle = crestGrad;
   ctx.fill();
-  ctx.strokeStyle = rim;
+  ctx.strokeStyle = 'rgba(255,255,255,0.26)';
+  ctx.lineWidth = 1.6;
+  for (let a = 1.09; a <= 1.955; a += 0.048) {
+    const rad = Math.PI * a;
+    ctx.beginPath();
+    ctx.moveTo(4 + Math.cos(rad) * 73, -14 + Math.sin(rad) * 73);
+    ctx.lineTo(4 + Math.cos(rad) * 110, -14 + Math.sin(rad) * 110);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.arc(4, -14, 69, Math.PI * 1.05, Math.PI * 2.0);
+  ctx.strokeStyle = 'rgba(255,255,255,0.30)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  // --- bust silhouette: helmet dome, carved face profile, neck ---
+  const bust = () => {
+    ctx.beginPath();
+    ctx.moveTo(-30, -76);                                   // brim front
+    ctx.quadraticCurveTo(-50, -62, -50, -40);               // forehead under brim
+    ctx.lineTo(-54, -32);                                   // brow ridge step
+    ctx.quadraticCurveTo(-58, -26, -60, -12);               // brow to nose bridge
+    ctx.lineTo(-70, 2);                                     // straight roman nose
+    ctx.quadraticCurveTo(-72, 8, -62, 9);                   // nose underside
+    ctx.quadraticCurveTo(-58, 14, -62, 19);                 // philtrum
+    ctx.quadraticCurveTo(-68, 24, -60, 29);                 // upper lip
+    ctx.quadraticCurveTo(-66, 36, -56, 41);                 // lower lip
+    ctx.quadraticCurveTo(-62, 52, -48, 58);                 // chin
+    ctx.quadraticCurveTo(-34, 66, -20, 68);                 // jawline
+    ctx.lineTo(-14, 100);                                   // neck front
+    ctx.lineTo(32, 100);                                    // neck base
+    ctx.quadraticCurveTo(30, 60, 34, 40);                   // neck back
+    ctx.quadraticCurveTo(58, 24, 56, -10);                  // neck guard flare
+    ctx.quadraticCurveTo(54, -58, 12, -78);                 // helmet rear dome
+    ctx.quadraticCurveTo(-10, -84, -30, -76);               // dome to brim
+    ctx.closePath();
+  };
+  bust();
+  ctx.fillStyle = SILHOUETTE;
+  ctx.fill();
+  ctx.strokeStyle = LINE;
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // face profile engraving (forehead - nose - lips - chin), facing left
+  // interior engraving, clipped to the bust
+  ctx.save();
+  bust();
+  ctx.clip();
+  // helmet dome tone above the brow band
   ctx.beginPath();
-  ctx.moveTo(-40, -58);
-  ctx.quadraticCurveTo(-56, -34, -52, -14); // forehead to brow
-  ctx.lineTo(-62, -4);                     // brow ridge
-  ctx.quadraticCurveTo(-68, 8, -56, 12);   // nose
-  ctx.quadraticCurveTo(-62, 22, -52, 26);  // lips
-  ctx.quadraticCurveTo(-58, 40, -42, 46);  // chin
+  ctx.moveTo(-56, -36);
+  ctx.quadraticCurveTo(-6, -58, 48, -36);
+  ctx.lineTo(60, -80);
+  ctx.lineTo(-60, -80);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.055)';
+  ctx.fill();
+  // brow band, double rule
   ctx.strokeStyle = 'rgba(255,255,255,0.30)';
   ctx.lineWidth = 2.5;
-  ctx.stroke();
-
-  // cheek guard
   ctx.beginPath();
-  ctx.moveTo(-34, -2);
-  ctx.quadraticCurveTo(-26, 28, -6, 42);
-  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.moveTo(-54, -36);
+  ctx.quadraticCurveTo(-4, -56, 50, -36);
+  ctx.stroke();
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(-52, -30);
+  ctx.quadraticCurveTo(-4, -49, 48, -30);
+  ctx.stroke();
+  // cheek-guard seam: hooks around the ear, stroke only
+  ctx.strokeStyle = 'rgba(255,255,255,0.20)';
   ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(-30, -28);
+  ctx.quadraticCurveTo(-38, 6, -28, 32);
+  ctx.quadraticCurveTo(-20, 48, -2, 54);
+  ctx.stroke();
+  // ear
+  ctx.beginPath();
+  ctx.arc(-8, 10, 6, Math.PI * 0.3, Math.PI * 1.5);
+  ctx.stroke();
+  // neck shading hatch
+  ctx.strokeStyle = 'rgba(0,0,0,0.30)';
+  ctx.lineWidth = 1.5;
+  for (let x = -22; x < 40; x += 6) {
+    ctx.beginPath(); ctx.moveTo(x, 62); ctx.lineTo(x + 16, 104); ctx.stroke();
+  }
+  // helmet rear shading hatch
+  ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+  for (let y = -70; y < 30; y += 7) {
+    ctx.beginPath(); ctx.moveTo(20, y); ctx.lineTo(60, y + 22); ctx.stroke();
+  }
+  ctx.restore();
+
+  // rim-light along the carved profile
+  ctx.beginPath();
+  ctx.moveTo(-50, -40);
+  ctx.lineTo(-54, -32);
+  ctx.quadraticCurveTo(-58, -26, -60, -12);
+  ctx.lineTo(-70, 2);
+  ctx.quadraticCurveTo(-72, 8, -62, 9);
+  ctx.quadraticCurveTo(-58, 14, -62, 19);
+  ctx.quadraticCurveTo(-68, 24, -60, 29);
+  ctx.quadraticCurveTo(-66, 36, -56, 41);
+  ctx.quadraticCurveTo(-62, 52, -48, 58);
+  ctx.quadraticCurveTo(-34, 66, -20, 68);
+  ctx.strokeStyle = RIM;
+  ctx.lineWidth = 2.2;
   ctx.stroke();
 
-  // neck
+  // --- shoulder mantle: single tapered plate with segment arcs ---
   ctx.beginPath();
-  ctx.moveTo(-24, 44);
-  ctx.lineTo(-18, 92);
-  ctx.lineTo(34, 92);
-  ctx.lineTo(24, 40);
+  ctx.moveTo(-64, 98);
+  ctx.quadraticCurveTo(0, 84, 64, 98);
+  ctx.lineTo(84, 148);
+  ctx.quadraticCurveTo(0, 162, -84, 148);
   ctx.closePath();
-  ctx.fillStyle = fill;
+  ctx.fillStyle = SILHOUETTE;
   ctx.fill();
-
-  // shoulders / pauldron plate
-  roundRectPath(ctx, -86, 88, 172, 52, 22);
-  ctx.fillStyle = fill;
-  ctx.fill();
-  ctx.strokeStyle = rim;
+  ctx.strokeStyle = LINE;
   ctx.lineWidth = 2;
   ctx.stroke();
-  // pauldron segment lines
   ctx.strokeStyle = 'rgba(255,255,255,0.14)';
   ctx.lineWidth = 1.5;
-  for (const dx of [-46, -12, 22, 56]) {
-    ctx.beginPath();
-    ctx.moveTo(dx, 92);
-    ctx.lineTo(dx + 6, 138);
-    ctx.stroke();
-  }
+  ctx.beginPath();
+  ctx.moveTo(-72, 116);
+  ctx.quadraticCurveTo(0, 102, 72, 116);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(-78, 132);
+  ctx.quadraticCurveTo(0, 118, 78, 132);
+  ctx.stroke();
+  // emerald clasp
+  ctx.beginPath(); ctx.arc(0, 106, 5.5, 0, 6.2832);
+  ctx.fillStyle = 'rgba(167,243,208,0.6)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
 
   ctx.restore();
+}
+
+/* EMV chip with real contact-pad layout */
+function drawChip(ctx, x, y, w, h) {
+  const grad = ctx.createLinearGradient(x, y, x + w, y + h);
+  grad.addColorStop(0, '#ded9c8');
+  grad.addColorStop(0.5, '#b3ae9c');
+  grad.addColorStop(1, '#7e7a6a');
+  roundRectPath(ctx, x, y, w, h, 14);
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // contact pads
+  ctx.strokeStyle = 'rgba(0,0,0,0.42)';
+  ctx.lineWidth = 2;
+  const cx = x + w / 2, cy = y + h / 2;
+  roundRectPath(ctx, cx - w * 0.18, cy - h * 0.22, w * 0.36, h * 0.44, 6);
+  ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, cy - h * 0.18); ctx.lineTo(cx - w * 0.18, cy - h * 0.18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, cy + h * 0.18); ctx.lineTo(cx - w * 0.18, cy + h * 0.18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx + w * 0.18, cy - h * 0.18); ctx.lineTo(x + w, cy - h * 0.18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx + w * 0.18, cy + h * 0.18); ctx.lineTo(x + w, cy + h * 0.18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, y); ctx.lineTo(cx, cy - h * 0.22); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, cy + h * 0.22); ctx.lineTo(cx, y + h); ctx.stroke();
+  // top sheen
+  const sheen = ctx.createLinearGradient(x, y, x, y + h * 0.4);
+  sheen.addColorStop(0, 'rgba(255,255,255,0.35)');
+  sheen.addColorStop(1, 'rgba(255,255,255,0)');
+  roundRectPath(ctx, x, y, w, h, 14);
+  ctx.fillStyle = sheen;
+  ctx.fill();
+}
+
+/* Embossed metal text: shadow pass below-right, highlight above-left,
+   silver gradient face */
+function embossText(ctx, text, x, y, font, size) {
+  ctx.font = font;
+  ctx.fillStyle = 'rgba(0,0,0,0.62)';
+  ctx.fillText(text, x + 2.5, y + 3);
+  ctx.fillStyle = 'rgba(255,255,255,0.20)';
+  ctx.fillText(text, x - 1.5, y - 2);
+  const grad = ctx.createLinearGradient(0, y - size, 0, y + 6);
+  grad.addColorStop(0, '#f3f5f4');
+  grad.addColorStop(0.55, '#cfd4d1');
+  grad.addColorStop(1, '#9ba19d');
+  ctx.fillStyle = grad;
+  ctx.fillText(text, x, y);
 }
 
 function drawFront(ctx, total) {
@@ -319,64 +493,54 @@ function drawFront(ctx, total) {
   const sans = (w, s) => `${w} ${s}px Geist, system-ui, sans-serif`;
   const mono = (w, s) => `${w} ${s}px "Geist Mono", Menlo, monospace`;
 
-  // top-center lettering, engraved silver
+  // top lettering with flanking rules
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255,255,255,0.72)';
-  ctx.font = mono(600, 34);
-  ctx.fillText('C R E D I F Y', TEX_W / 2 - 4, 92);
+  ctx.fillStyle = 'rgba(255,255,255,0.78)';
+  ctx.font = mono(600, 33);
+  ctx.fillText('C R E D I F Y', TEX_W / 2 - 4, 84);
   ctx.fillStyle = '#a7f3d0';
-  ctx.beginPath(); ctx.arc(TEX_W / 2 + 128, 82, 5, 0, 6.2832); ctx.fill();
-  ctx.fillStyle = 'rgba(255,255,255,0.34)';
+  ctx.beginPath(); ctx.arc(TEX_W / 2 + 124, 74, 5, 0, 6.2832); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(196, 74); ctx.lineTo(352, 74); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(672, 74); ctx.lineTo(828, 74); ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,0.36)';
   ctx.font = mono(500, 17);
-  ctx.fillText('C E N T U R I O N   D E S K', TEX_W / 2, 128);
+  ctx.fillText('C E N T U R I O N   D E S K', TEX_W / 2, 118);
   ctx.textAlign = 'left';
 
   // centered centurion emblem
-  ctx.save();
-  ctx.translate(TEX_W / 2, 284);
-  ctx.scale(0.92, 0.92);
-  ctx.translate(-TEX_W / 2, -284);
-  drawCenturion(ctx, TEX_W / 2, 284);
-  ctx.restore();
+  drawCenturion(ctx, TEX_W / 2, 268, 0.86);
 
   // chip, left-middle
-  const cg = ctx.createLinearGradient(72, 268, 196, 360);
-  cg.addColorStop(0, '#d9d5c6');
-  cg.addColorStop(1, '#84806f');
-  roundRectPath(ctx, 72, 268, 124, 92, 16);
-  ctx.fillStyle = cg;
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-  ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.moveTo(72, 268 + 31); ctx.lineTo(196, 268 + 31); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(72, 268 + 61); ctx.lineTo(196, 268 + 61); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(134, 268); ctx.lineTo(134, 360); ctx.stroke();
+  drawChip(ctx, 74, 246, 122, 92);
 
-  // embossed number, Amex-style 4-6-5 grouping (shadow pass then face pass)
-  ctx.font = mono(500, 46);
-  ctx.fillStyle = 'rgba(0,0,0,0.55)';
-  ctx.fillText('37\u2022\u2022  \u2022\u2022\u2022\u2022\u2022\u2022  \u20228400', 66, 476);
-  ctx.fillStyle = 'rgba(236,240,238,0.85)';
-  ctx.fillText('37\u2022\u2022  \u2022\u2022\u2022\u2022\u2022\u2022  \u20228400', 64, 473);
+  // full embossed number, Amex 4-6-5 grouping
+  embossText(ctx, '3742  840100  08400', 64, 468, `500 50px "Geist Mono", Menlo, monospace`, 50);
 
-  // label + live total
-  ctx.fillStyle = 'rgba(255,255,255,0.48)';
-  ctx.font = mono(600, 22);
-  ctx.fillText('A P P R O V E D   C A P I T A L', 64, 528);
-  ctx.fillStyle = '#a7f3d0';
-  ctx.font = sans(700, 62);
-  ctx.fillText(total, 64, 592);
-
-  // bottom-right marks
-  ctx.textAlign = 'right';
-  ctx.fillStyle = 'rgba(255,255,255,0.44)';
-  ctx.font = mono(600, 21);
-  ctx.fillText('MEMBER SINCE \u00B7 MMXXVI', TEX_W - 64, 540);
+  // member / valid row
   ctx.fillStyle = 'rgba(255,255,255,0.40)';
-  ctx.fillText('$100K MIN \u00B7 GUARANTEED', TEX_W - 64, 584);
+  ctx.font = mono(600, 19);
+  ctx.fillText('MEMBER SINCE', 64, 512);
+  ctx.fillText('VALID THRU', 356, 512);
+  embossText(ctx, '26', 218, 513, `500 24px "Geist Mono", Menlo, monospace`, 24);
+  embossText(ctx, '12/31', 484, 513, `500 24px "Geist Mono", Menlo, monospace`, 24);
+
+  // approved capital, live from the calculator
+  ctx.fillStyle = 'rgba(255,255,255,0.48)';
+  ctx.font = mono(600, 21);
+  ctx.fillText('A P P R O V E D   C A P I T A L', 64, 552);
+  ctx.fillStyle = '#a7f3d0';
+  ctx.font = sans(700, 58);
+  ctx.fillText(total, 64, 606);
+
+  // bottom-right guarantee
+  ctx.textAlign = 'right';
+  ctx.fillStyle = 'rgba(255,255,255,0.42)';
+  ctx.font = mono(600, 20);
+  ctx.fillText('$100K MIN · GUARANTEED', TEX_W - 64, 604);
   ctx.textAlign = 'left';
 }
-
 
 function drawBack(ctx) {
   cardBase(ctx);
@@ -770,3 +934,5 @@ export function init() {
 
   rafId = requestAnimationFrame(loop);
 }
+
+export const __faces = { drawFront, drawBack, TEX_W, TEX_H };
