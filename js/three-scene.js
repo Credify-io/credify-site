@@ -178,32 +178,140 @@ function cardBase(ctx) {
   roundRectPath(ctx, 0, 0, TEX_W, TEX_H, TEX_R);
   ctx.save();
   ctx.clip();
-  // body: near-black vertical sheen
+  // matte graphite black (Centurion-style), whisper of emerald kept for brand
   const g = ctx.createLinearGradient(0, 0, TEX_W, TEX_H);
-  g.addColorStop(0, '#28322e');
-  g.addColorStop(0.45, '#121715');
-  g.addColorStop(1, '#0a0d0c');
+  g.addColorStop(0, '#1d201f');
+  g.addColorStop(0.45, '#101211');
+  g.addColorStop(1, '#0a0b0b');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
-  // emerald ambient top-right
   const rg = ctx.createRadialGradient(TEX_W * 0.9, TEX_H * 0.05, 40, TEX_W * 0.9, TEX_H * 0.05, 620);
-  rg.addColorStop(0, 'rgba(167,243,208,0.30)');
+  rg.addColorStop(0, 'rgba(167,243,208,0.12)');
   rg.addColorStop(1, 'rgba(167,243,208,0)');
   ctx.fillStyle = rg;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
+  // fine engraved guilloche: sparse diagonal micro-lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.022)';
+  ctx.lineWidth = 1;
+  for (let x = -TEX_H; x < TEX_W; x += 14) {
+    ctx.beginPath();
+    ctx.moveTo(x, TEX_H);
+    ctx.lineTo(x + TEX_H, 0);
+    ctx.stroke();
+  }
   // diagonal specular band
   const sg = ctx.createLinearGradient(0, TEX_H, TEX_W, 0);
   sg.addColorStop(0.42, 'rgba(255,255,255,0)');
-  sg.addColorStop(0.5, 'rgba(255,255,255,0.12)');
+  sg.addColorStop(0.5, 'rgba(255,255,255,0.09)');
   sg.addColorStop(0.58, 'rgba(255,255,255,0)');
   ctx.fillStyle = sg;
   ctx.fillRect(0, 0, TEX_W, TEX_H);
   ctx.restore();
   // hairline rim
   roundRectPath(ctx, 1.5, 1.5, TEX_W - 3, TEX_H - 3, TEX_R - 1);
-  ctx.strokeStyle = 'rgba(255,255,255,0.34)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.30)';
   ctx.lineWidth = 3;
   ctx.stroke();
+}
+
+/* Engraved centurion emblem - stylized crested bust, drawn as layered
+   low-contrast strokes so it reads like etched metal at card scale. */
+function drawCenturion(ctx, cx, cy) {
+  ctx.save();
+  ctx.translate(cx, cy);
+
+  // engraved concentric rings behind the bust
+  ctx.strokeStyle = 'rgba(255,255,255,0.030)';
+  ctx.lineWidth = 1.2;
+  for (let r = 70; r <= 215; r += 16) {
+    ctx.beginPath(); ctx.arc(0, 0, r, 0, 6.2832); ctx.stroke();
+  }
+
+  const fill = 'rgba(255,255,255,0.085)';
+  const rim = 'rgba(255,255,255,0.22)';
+
+  // helmet crest: thick arc band over the head
+  ctx.beginPath();
+  ctx.arc(0, -6, 96, Math.PI * 1.12, Math.PI * 1.92);
+  ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+  ctx.lineWidth = 30;
+  ctx.stroke();
+  // crest plume lines fanning through the band
+  ctx.strokeStyle = 'rgba(255,255,255,0.20)';
+  ctx.lineWidth = 2;
+  for (let a = 1.16; a <= 1.88; a += 0.075) {
+    const ang = Math.PI * a;
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(ang) * 80, -6 + Math.sin(ang) * 80);
+    ctx.lineTo(Math.cos(ang) * 113, -6 + Math.sin(ang) * 113);
+    ctx.stroke();
+  }
+  // crest tail falling behind the neck
+  ctx.beginPath();
+  ctx.moveTo(88, -30);
+  ctx.quadraticCurveTo(112, 30, 96, 92);
+  ctx.quadraticCurveTo(88, 40, 74, 4);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.07)';
+  ctx.fill();
+
+  // head + helmet dome
+  ctx.beginPath();
+  ctx.ellipse(0, -14, 54, 64, 0, 0, 6.2832);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = rim;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // face profile engraving (forehead - nose - lips - chin), facing left
+  ctx.beginPath();
+  ctx.moveTo(-40, -58);
+  ctx.quadraticCurveTo(-56, -34, -52, -14); // forehead to brow
+  ctx.lineTo(-62, -4);                     // brow ridge
+  ctx.quadraticCurveTo(-68, 8, -56, 12);   // nose
+  ctx.quadraticCurveTo(-62, 22, -52, 26);  // lips
+  ctx.quadraticCurveTo(-58, 40, -42, 46);  // chin
+  ctx.strokeStyle = 'rgba(255,255,255,0.30)';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // cheek guard
+  ctx.beginPath();
+  ctx.moveTo(-34, -2);
+  ctx.quadraticCurveTo(-26, 28, -6, 42);
+  ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // neck
+  ctx.beginPath();
+  ctx.moveTo(-24, 44);
+  ctx.lineTo(-18, 92);
+  ctx.lineTo(34, 92);
+  ctx.lineTo(24, 40);
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+
+  // shoulders / pauldron plate
+  roundRectPath(ctx, -86, 88, 172, 52, 22);
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = rim;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  // pauldron segment lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+  ctx.lineWidth = 1.5;
+  for (const dx of [-46, -12, 22, 56]) {
+    ctx.beginPath();
+    ctx.moveTo(dx, 92);
+    ctx.lineTo(dx + 6, 138);
+    ctx.stroke();
+  }
+
+  ctx.restore();
 }
 
 function drawFront(ctx, total) {
@@ -211,55 +319,64 @@ function drawFront(ctx, total) {
   const sans = (w, s) => `${w} ${s}px Geist, system-ui, sans-serif`;
   const mono = (w, s) => `${w} ${s}px "Geist Mono", Menlo, monospace`;
 
-  // wordmark
-  ctx.fillStyle = '#ffffff';
-  ctx.font = sans(700, 76);
-  ctx.fillText('Credify', 64, 128);
-  // pip
+  // top-center lettering, engraved silver
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255,255,255,0.72)';
+  ctx.font = mono(600, 34);
+  ctx.fillText('C R E D I F Y', TEX_W / 2 - 4, 92);
   ctx.fillStyle = '#a7f3d0';
-  ctx.beginPath(); ctx.arc(348, 102, 10, 0, 6.2832); ctx.fill();
-  // holo disc top-right
-  const hg = ctx.createRadialGradient(TEX_W - 130, 120, 6, TEX_W - 130, 120, 66);
-  hg.addColorStop(0, 'rgba(167,243,208,0.85)');
-  hg.addColorStop(0.4, 'rgba(167,243,208,0.25)');
-  hg.addColorStop(1, 'rgba(167,243,208,0)');
-  ctx.fillStyle = hg;
-  ctx.beginPath(); ctx.arc(TEX_W - 130, 120, 66, 0, 6.2832); ctx.fill();
+  ctx.beginPath(); ctx.arc(TEX_W / 2 + 128, 82, 5, 0, 6.2832); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,0.34)';
+  ctx.font = mono(500, 17);
+  ctx.fillText('C E N T U R I O N   D E S K', TEX_W / 2, 128);
+  ctx.textAlign = 'left';
 
-  // chip
-  const cg = ctx.createLinearGradient(64, 236, 224, 356);
-  cg.addColorStop(0, '#e4e0d0');
-  cg.addColorStop(1, '#8f8b7c');
-  roundRectPath(ctx, 64, 236, 160, 120, 20);
+  // centered centurion emblem
+  ctx.save();
+  ctx.translate(TEX_W / 2, 284);
+  ctx.scale(0.92, 0.92);
+  ctx.translate(-TEX_W / 2, -284);
+  drawCenturion(ctx, TEX_W / 2, 284);
+  ctx.restore();
+
+  // chip, left-middle
+  const cg = ctx.createLinearGradient(72, 268, 196, 360);
+  cg.addColorStop(0, '#d9d5c6');
+  cg.addColorStop(1, '#84806f');
+  roundRectPath(ctx, 72, 268, 124, 92, 16);
   ctx.fillStyle = cg;
   ctx.fill();
   ctx.strokeStyle = 'rgba(0,0,0,0.45)';
-  ctx.lineWidth = 3;
-  for (let i = 1; i < 3; i++) {
-    ctx.beginPath(); ctx.moveTo(64, 236 + i * 40); ctx.lineTo(224, 236 + i * 40); ctx.stroke();
-  }
-  ctx.beginPath(); ctx.moveTo(144, 236); ctx.lineTo(144, 356); ctx.stroke();
+  ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(72, 268 + 31); ctx.lineTo(196, 268 + 31); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(72, 268 + 61); ctx.lineTo(196, 268 + 61); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(134, 268); ctx.lineTo(134, 360); ctx.stroke();
 
-  // number
-  ctx.fillStyle = 'rgba(255,255,255,0.88)';
-  ctx.font = mono(500, 56);
-  ctx.fillText('••••  ••••  ••••  8400', 64, 468);
+  // embossed number, Amex-style 4-6-5 grouping (shadow pass then face pass)
+  ctx.font = mono(500, 46);
+  ctx.fillStyle = 'rgba(0,0,0,0.55)';
+  ctx.fillText('37\u2022\u2022  \u2022\u2022\u2022\u2022\u2022\u2022  \u20228400', 66, 476);
+  ctx.fillStyle = 'rgba(236,240,238,0.85)';
+  ctx.fillText('37\u2022\u2022  \u2022\u2022\u2022\u2022\u2022\u2022  \u20228400', 64, 473);
 
   // label + live total
-  ctx.fillStyle = 'rgba(255,255,255,0.52)';
-  ctx.font = mono(600, 25);
-  ctx.fillText('A P P R O V E D   C A P I T A L', 64, 530);
+  ctx.fillStyle = 'rgba(255,255,255,0.48)';
+  ctx.font = mono(600, 22);
+  ctx.fillText('A P P R O V E D   C A P I T A L', 64, 528);
   ctx.fillStyle = '#a7f3d0';
-  ctx.font = sans(700, 68);
-  ctx.fillText(total, 64, 600);
+  ctx.font = sans(700, 62);
+  ctx.fillText(total, 64, 592);
 
-  // guarantee mark bottom-right
-  ctx.fillStyle = 'rgba(255,255,255,0.42)';
-  ctx.font = mono(600, 23);
+  // bottom-right marks
   ctx.textAlign = 'right';
-  ctx.fillText('$100K MIN · GUARANTEED', TEX_W - 64, 596);
+  ctx.fillStyle = 'rgba(255,255,255,0.44)';
+  ctx.font = mono(600, 21);
+  ctx.fillText('MEMBER SINCE \u00B7 MMXXVI', TEX_W - 64, 540);
+  ctx.fillStyle = 'rgba(255,255,255,0.40)';
+  ctx.fillText('$100K MIN \u00B7 GUARANTEED', TEX_W - 64, 584);
   ctx.textAlign = 'left';
 }
+
 
 function drawBack(ctx) {
   cardBase(ctx);
@@ -581,11 +698,14 @@ export function init() {
 
     const heroVisible = window.scrollY < window.innerHeight;
     const idle = now - lastActivity > 1500;
-    // Past the hero and idle: drop to ~12fps. Form dominant on apply: pause.
+    // Form dominant on apply: pause entirely.
     if (formDominant && !heroVisible) return;
-    if (!heroVisible && idle && frame % 5 !== 0) return;
+    // The card, lights, and field animate perpetually - heavy frame-skipping
+    // reads as jank. Desktop always renders at full rate (one draw call is
+    // cheap); coarse-pointer devices drop to 30fps when idle to save battery.
+    if (isCoarse && !heroVisible && idle && frame % 2 !== 0) return;
 
-    const dt = Math.min(100, now - prev);
+    const dt = Math.min(50, now - prev);
     prev = now;
     watchdog(dt);
     if (degradeStage > 1) return;
