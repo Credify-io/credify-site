@@ -6,11 +6,36 @@
 <title>Credify // Book a Strategy Call</title>
 <meta name="description" content="Book a 20-minute strategy call with our desk. We'll review your situation and tell you straight if and how we can help. No credit pull, no commitment." />
 <meta name="theme-color" content="#000000" />
-<link rel="canonical" href="https://getcredify.io/apply" />
+<link rel="canonical" href="https://getcredify.io/apply/" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Credify // Book a Strategy Call" />
+<meta property="og:description" content="20-minute strategy call with our desk. No credit pull, no commitment. $100K minimum approval, guaranteed." />
+<meta property="og:url" content="https://getcredify.io/apply/" />
+<meta property="og:image" content="https://getcredify.io/assets/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Credify // Book a Strategy Call" />
+<meta name="twitter:description" content="20-minute strategy call. No credit pull, no commitment. $100K minimum approval, guaranteed." />
+<meta name="twitter:image" content="https://getcredify.io/assets/og.png" />
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000000'/><text x='50%25' y='58%25' text-anchor='middle' font-family='system-ui, sans-serif' font-size='36' font-weight='800' fill='%23ffffff' dominant-baseline='middle'>C</text></svg>" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrcdmhHkjko.woff2" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+<script src="/js/boot.js" defer></script>
+<script src="/js/site.js" defer></script>
 
 <link rel="stylesheet" href="/styles/credify.css" />
 
@@ -116,6 +141,11 @@
     color: var(--fg-70);
   }
   .apply-trust-strip .sep { color: var(--fg-30); }
+  html.has-3d .apply-hero-mesh {
+    background:
+      radial-gradient(55% 55% at 75% 18%, rgba(16, 185, 129, 0.10), rgba(16, 185, 129, 0) 62%),
+      radial-gradient(50% 70% at 20% 100%, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0) 60%);
+  }
   .apply-trust-strip .pip {
     width: 6px; height: 6px;
     border-radius: 50%;
@@ -143,14 +173,17 @@
     position: relative;
     border-radius: 24px;
     padding: clamp(32px, 4.4vw, 56px);
-    /* Same recipe as .nav.is-stuck .nav-inner */
-    background: rgba(255, 255, 255, 0.05);
+    /* Near-opaque plate: the 3D layer behind made translucent glass hard to read */
+    background: rgba(15, 18, 17, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     isolation: isolate;
     box-shadow:
-      0 10px 34px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.10),
+      0 0 0 7px rgba(255, 255, 255, 0.03),
+      0 0 0 8px rgba(255, 255, 255, 0.08),
+      0 28px 56px -28px rgba(0, 0, 0, 0.72),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
   .apply-form-shell::before {
@@ -286,7 +319,7 @@
     font-weight: 500;
     color: #ffffff;
     /* Inputs sit slightly recessed inside the shell with a deeper plate */
-    background: linear-gradient(180deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.20) 100%);
+    background: linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 11px;
     padding: 14px 16px;
@@ -310,13 +343,13 @@
   .field-select:hover,
   .field-textarea:hover {
     border-color: rgba(255,255,255,0.26);
-    background: linear-gradient(180deg, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.14) 100%);
+    background: linear-gradient(180deg, rgba(16, 19, 18, 0.96) 0%, rgba(19, 23, 21, 0.94) 100%);
   }
   .field-input:focus,
   .field-select:focus,
   .field-textarea:focus {
     border-color: rgba(167, 243, 208, 0.90);
-    background: linear-gradient(180deg, rgba(167,243,208,0.04) 0%, rgba(0,0,0,0.18) 100%);
+    background: linear-gradient(180deg, rgba(20, 26, 24, 0.96) 0%, rgba(12, 15, 14, 0.94) 100%);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.06),
       0 0 0 3px rgba(167, 243, 208, 0.22),
@@ -335,7 +368,7 @@
     -webkit-appearance: none;
     background-image:
       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23a7f3d0' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M1 2l5 4 5-4'/></svg>"),
-      linear-gradient(180deg, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0.20) 100%);
+      linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
     background-repeat: no-repeat, no-repeat;
     background-position: right 16px center, 0 0;
     background-size: auto, 100% 100%;
@@ -378,7 +411,7 @@
     position: relative;
     cursor: pointer;
     user-select: none;
-    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.18) 100%);
+    background: linear-gradient(180deg, rgba(22, 26, 24, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 13px;
     padding: 13px 8px 15px;
@@ -397,7 +430,7 @@
   }
   .day-tile:hover:not(.is-disabled) {
     border-color: rgba(255,255,255,0.28);
-    background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.12) 100%);
+    background: linear-gradient(180deg, rgba(27, 32, 30, 0.96) 0%, rgba(16, 19, 18, 0.94) 100%);
     color: #ffffff;
     transform: translateY(-1px);
   }
@@ -458,7 +491,7 @@
     cursor: pointer;
     padding: 13px 10px;
     border-radius: 10px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.18) 100%);
+    background: linear-gradient(180deg, rgba(22, 26, 24, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
     border: 1px solid rgba(255, 255, 255, 0.14);
     font-family: var(--font-mono);
     font-size: 13px;
@@ -478,7 +511,7 @@
   }
   .slot-btn:hover:not(:disabled) {
     border-color: rgba(255,255,255,0.30);
-    background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.12) 100%);
+    background: linear-gradient(180deg, rgba(27, 32, 30, 0.96) 0%, rgba(16, 19, 18, 0.94) 100%);
     transform: translateY(-1px);
   }
   .slot-btn.is-active {
@@ -650,14 +683,17 @@
     position: relative;
     border-radius: 24px;
     padding: 28px 26px 26px;
-    /* Same recipe as .nav.is-stuck .nav-inner, match the form shell exactly */
-    background: rgba(255, 255, 255, 0.05);
+    /* Matches the form shell's near-opaque plate */
+    background: rgba(15, 18, 17, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(14px) saturate(140%);
     -webkit-backdrop-filter: blur(14px) saturate(140%);
     isolation: isolate;
     box-shadow:
-      0 10px 34px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.10),
+      0 0 0 7px rgba(255, 255, 255, 0.03),
+      0 0 0 8px rgba(255, 255, 255, 0.08),
+      0 28px 56px -28px rgba(0, 0, 0, 0.72),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
     overflow: hidden;
   }
@@ -836,8 +872,28 @@
   }
 </style>
 
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://getcredify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Book a Strategy Call", "item": "https://getcredify.io/apply/" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Book a Strategy Call with Credify",
+  "url": "https://getcredify.io/apply/",
+  "description": "Book a 20-minute strategy call. No credit pull, no commitment. $100K minimum approval, guaranteed."
+}
+</script>
 </head>
-<body data-screen-label="Apply">
+<body data-page="apply" data-screen-label="Apply">
 
 <a href="#main" class="skip-link">Skip to content</a>
 
@@ -1139,211 +1195,7 @@
   </div>
 </footer>
 
-<script>
-  (function () {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ---------- Sticky nav background on scroll ----------
-    const nav = document.getElementById('nav');
-    const onScroll = () => {
-      if (!nav) return;
-      if (window.scrollY > 24) nav.classList.add('is-stuck');
-      else nav.classList.remove('is-stuck');
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // ---------- Reveal-on-scroll ----------
-    if (!reduce && 'IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-in');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    } else {
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-in'));
-    }
-
-    // ---------- Day / time-slot picker ----------
-    // Generates the next 14 weekdays. Weekends are shown but disabled
-    // (the desk is closed). Each weekday gets a randomized but stable subset
-    // of available time slots between 9am and 5pm ET, so the page feels real
-    //, some slots are already taken.
-    const dayTrack  = document.querySelector('.day-track');
-    const slotGrid  = document.querySelector('.slot-grid');
-    const slotInput = document.getElementById('f-slot');
-    const slotHint  = document.getElementById('slot-hint');
-    const slotHintText = document.getElementById('slot-hint-text');
-
-    const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const MO  = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    // Half-hour slots, 9:00am – 4:30pm ET (last call starts 4:30, ends 4:50)
-    const SLOTS = [
-      '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
-      '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
-      '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM',
-      '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
-    ];
-    // Deterministic pseudo-random based on date string, same "taken" slots
-    // every load, so a user re-visiting sees a stable calendar.
-    const seedHash = (s) => {
-      let h = 0;
-      for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-      return Math.abs(h);
-    };
-    const isTaken = (dateStr, slotIdx) => {
-      // ~35% of slots taken, roughly weighted toward midday
-      const h = seedHash(dateStr + ':' + slotIdx);
-      return (h % 100) < 35;
-    };
-
-    // Build the 14 upcoming days
-    const days = [];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i + 1); // start tomorrow
-      const dow = d.getDay();
-      const isWeekend = (dow === 0 || dow === 6);
-      const dateStr = d.toISOString().slice(0, 10);
-      days.push({
-        date: d,
-        dateStr,
-        dow: DOW[dow],
-        day: d.getDate(),
-        mo: MO[d.getMonth()],
-        isWeekend
-      });
-    }
-
-    // Render day track (show 7 at a time on desktop, all 14 scrollable on mobile)
-    const visibleDays = window.matchMedia('(max-width: 720px)').matches ? days : days.slice(0, 7);
-    let selectedDay = null;
-    let selectedSlot = null;
-
-    visibleDays.forEach(d => {
-      const tile = document.createElement('button');
-      tile.type = 'button';
-      tile.className = 'day-tile' + (d.isWeekend ? ' is-disabled' : '');
-      tile.setAttribute('role', 'radio');
-      tile.setAttribute('aria-checked', 'false');
-      tile.setAttribute('aria-label', `${d.dow} ${d.mo} ${d.day}${d.isWeekend ? ' (closed)' : ''}`);
-      if (d.isWeekend) tile.disabled = true;
-      tile.dataset.dateStr = d.dateStr;
-      tile.innerHTML = `
-        <span class="day-tile-dow">${d.dow}</span>
-        <span class="day-tile-day">${d.day}</span>
-        <span class="day-tile-mo">${d.mo}</span>
-      `;
-      tile.addEventListener('click', () => {
-        if (d.isWeekend) return;
-        selectDay(d);
-      });
-      dayTrack.appendChild(tile);
-    });
-
-    function renderSlots(d) {
-      slotGrid.innerHTML = '';
-      SLOTS.forEach((label, idx) => {
-        const taken = isTaken(d.dateStr, idx);
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'slot-btn';
-        btn.setAttribute('role', 'radio');
-        btn.setAttribute('aria-checked', 'false');
-        btn.setAttribute('aria-label', `${label} on ${d.dow} ${d.mo} ${d.day}${taken ? ' (unavailable)' : ''}`);
-        btn.disabled = taken;
-        btn.textContent = label;
-        btn.addEventListener('click', () => selectSlot(d, label, btn));
-        slotGrid.appendChild(btn);
-      });
-    }
-
-    function selectDay(d) {
-      selectedDay = d;
-      selectedSlot = null;
-      slotInput.value = '';
-      // Update day-tile active state
-      [...dayTrack.children].forEach(t => {
-        const isMe = t.dataset.dateStr === d.dateStr;
-        t.classList.toggle('is-active', isMe);
-        t.setAttribute('aria-checked', isMe ? 'true' : 'false');
-      });
-      renderSlots(d);
-      slotHint.classList.remove('is-confirmed');
-      slotHintText.textContent = `Choose a time for ${d.dow}, ${d.mo} ${d.day}`;
-    }
-
-    function selectSlot(d, label, btn) {
-      selectedSlot = label;
-      [...slotGrid.children].forEach(b => {
-        b.classList.remove('is-active');
-        b.setAttribute('aria-checked', 'false');
-      });
-      btn.classList.add('is-active');
-      btn.setAttribute('aria-checked', 'true');
-      const value = `${d.dow}, ${d.mo} ${d.day} · ${label} ET`;
-      slotInput.value = value;
-      slotHint.classList.add('is-confirmed');
-      slotHintText.textContent = `Holding ${value}`;
-    }
-
-    // Empty initial slot grid hint
-    if (slotGrid && !slotGrid.children.length) {
-      const empty = document.createElement('div');
-      empty.className = 'slot-grid-empty';
-      empty.textContent = 'Pick a day above to see open times.';
-      slotGrid.appendChild(empty);
-    }
-
-    // ---------- Pre-fill from URL params (e.g. ?industry=Real%20Estate) ----------
-    const params = new URLSearchParams(window.location.search);
-    const setIfParam = (paramKey, fieldId) => {
-      const v = params.get(paramKey);
-      if (!v) return;
-      const el = document.getElementById(fieldId);
-      if (!el) return;
-      // For selects, only set if a matching option exists
-      if (el.tagName === 'SELECT') {
-        const found = [...el.options].find(o => o.value === v || o.textContent.trim() === v);
-        if (found) el.value = found.value || found.textContent;
-      } else {
-        el.value = v;
-      }
-    };
-    setIfParam('industry', 'f-industry');
-    setIfParam('amount', 'f-amount');
-
-    // ---------- Submit handling ----------
-    const form = document.getElementById('apply-form');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        // Native validation pass first
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
-        // Inject booked slot into success copy
-        const successWhen = document.getElementById('success-when');
-        if (successWhen && slotInput && slotInput.value) {
-          successWhen.textContent = slotInput.value;
-        }
-        form.classList.add('is-submitted');
-        // Smooth scroll the success card into a comfortable position
-        const card = form;
-        if (card && card.scrollIntoView) {
-          window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
-        }
-      });
-    }
-  })();
-</script>
 
 </body>
 </html>

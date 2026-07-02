@@ -11,16 +11,31 @@
 <meta property="og:title" content="Credify // Solutions: Capital Built for Your Industry" />
 <meta property="og:description" content="Industry-specific funding for operators denied everywhere else. $100K minimum approval, guaranteed." />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Credify // Solutions: Capital Built for Your Industry" />
+<meta name="twitter:description" content="Industry-specific funding for operators denied everywhere else. $100K minimum approval, guaranteed." />
+<meta name="twitter:image" content="https://getcredify.io/assets/og.png" />
+<meta property="og:url" content="https://getcredify.io/solutions/" />
+<meta property="og:image" content="https://getcredify.io/assets/og.png" />
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23000000'/><text x='50%25' y='58%25' text-anchor='middle' font-family='system-ui, sans-serif' font-size='36' font-weight='800' fill='%23ffffff' dominant-baseline='middle'>C</text></svg>" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/geistmono/v6/or3nQ6H-1_WfwkMZI_qYFrcdmhHkjko.woff2" />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+<script src="/js/boot.js" defer></script>
+<script src="/js/site.js" defer></script>
 
 <link rel="stylesheet" href="/styles/credify.css" />
 
@@ -39,10 +54,12 @@
     min-height: 78vh;
     width: 100%;
     display: flex;
-    align-items: flex-end;
+    /* Centered: bottom-anchoring only made sense with the old full-bleed
+       hero photograph behind the copy. */
+    align-items: center;
     justify-content: center;
-    padding-top: clamp(140px, 17vh, 200px);
-    padding-bottom: clamp(64px, 8vw, 112px);
+    padding-top: clamp(110px, 13vh, 160px);
+    padding-bottom: clamp(48px, 6vw, 88px);
     background: var(--background);
     overflow: hidden;
     text-align: center;
@@ -506,10 +523,43 @@
     z-index: 0;
   }
   .ind-card.is-flag > * { position: relative; z-index: 1; }
+
+  /* 3D mode: hero image is gone; soften the darken overlay so the particle
+     field reads through, keep the bottom fade for the section seam. */
+  html.has-3d .sol-hero-overlay { opacity: 0.55; }
 </style>
 
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://getcredify.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Solutions", "item": "https://getcredify.io/solutions/" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Industry funding solutions",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Real Estate Business Funding", "url": "https://getcredify.io/solutions/#real-estate" },
+    { "@type": "ListItem", "position": 2, "name": "Construction Business Funding", "url": "https://getcredify.io/solutions/#construction" },
+    { "@type": "ListItem", "position": 3, "name": "Healthcare Business Funding", "url": "https://getcredify.io/solutions/#healthcare" },
+    { "@type": "ListItem", "position": 4, "name": "Retail Business Funding", "url": "https://getcredify.io/solutions/#retail" },
+    { "@type": "ListItem", "position": 5, "name": "Restaurants Business Funding", "url": "https://getcredify.io/solutions/#restaurants" },
+    { "@type": "ListItem", "position": 6, "name": "Trucking & Logistics Business Funding", "url": "https://getcredify.io/solutions/#trucking" },
+    { "@type": "ListItem", "position": 7, "name": "Manufacturing Business Funding", "url": "https://getcredify.io/solutions/#manufacturing" },
+    { "@type": "ListItem", "position": 8, "name": "Home Services Business Funding", "url": "https://getcredify.io/solutions/#home-services" },
+    { "@type": "ListItem", "position": 9, "name": "Professional Services Business Funding", "url": "https://getcredify.io/solutions/#professional" }
+  ]
+}
+</script>
 </head>
-<body>
+<body data-page="solutions">
 
 <a href="#main" class="skip-link">Skip to content</a>
 
@@ -624,9 +674,6 @@
 
 <!-- =================== HERO =================== -->
 <section class="sol-hero" aria-labelledby="sol-hero-h1">
-  <div class="sol-hero-bg" aria-hidden="true">
-    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2400&auto=format&fit=crop" alt="" loading="eager" />
-  </div>
   <div class="sol-hero-overlay" aria-hidden="true"></div>
   <div class="sol-hero-fade" aria-hidden="true"></div>
 
@@ -717,7 +764,7 @@
     <div class="ind-grid reveal">
 
       <!-- ============ REAL ESTATE (FLAGSHIP, spans 2 cols) ============ -->
-      <article id="real-estate" class="ind-card is-flag">
+      <article id="real-estate" class="ind-card is-flag" data-tilt>
         <div class="ind-card-head">
           <div>
             <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Flagship Sector</div>
@@ -754,7 +801,7 @@
       </article>
 
       <!-- ============ CONSTRUCTION ============ -->
-      <article id="construction" class="ind-card">
+      <article id="construction" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 02</div>
           <h3>Construction</h3>
@@ -785,7 +832,7 @@
       </article>
 
       <!-- ============ HEALTHCARE ============ -->
-      <article id="healthcare" class="ind-card">
+      <article id="healthcare" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 03</div>
           <h3>Healthcare</h3>
@@ -816,7 +863,7 @@
       </article>
 
       <!-- ============ RETAIL ============ -->
-      <article id="retail" class="ind-card">
+      <article id="retail" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 04</div>
           <h3>Retail</h3>
@@ -847,7 +894,7 @@
       </article>
 
       <!-- ============ RESTAURANTS ============ -->
-      <article id="restaurants" class="ind-card">
+      <article id="restaurants" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 05</div>
           <h3>Restaurants</h3>
@@ -878,7 +925,7 @@
       </article>
 
       <!-- ============ TRUCKING ============ -->
-      <article id="trucking" class="ind-card">
+      <article id="trucking" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 06</div>
           <h3>Trucking &amp; Logistics</h3>
@@ -909,7 +956,7 @@
       </article>
 
       <!-- ============ MANUFACTURING ============ -->
-      <article id="manufacturing" class="ind-card">
+      <article id="manufacturing" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 07</div>
           <h3>Manufacturing</h3>
@@ -940,7 +987,7 @@
       </article>
 
       <!-- ============ HOME SERVICES ============ -->
-      <article id="home-services" class="ind-card">
+      <article id="home-services" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 08</div>
           <h3>Home Services</h3>
@@ -971,7 +1018,7 @@
       </article>
 
       <!-- ============ PROFESSIONAL SERVICES ============ -->
-      <article id="professional" class="ind-card">
+      <article id="professional" class="ind-card" data-tilt>
         <div class="ind-card-head">
           <div class="ind-card-eyebrow"><span class="pip" aria-hidden="true"></span>Sector 09</div>
           <h3>Professional Services</h3>
@@ -1080,83 +1127,7 @@
   </div>
 </footer>
 
-<script>
-  (function () {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ---------- Services dropdown (mirrors home behaviour) ----------
-    document.querySelectorAll('[data-nav-dropdown]').forEach(dd => {
-      const trigger = dd.querySelector('.nav-link--trigger');
-      const menu = dd.querySelector('.nav-menu');
-      if (!trigger || !menu) return;
-
-      let openTimer, closeTimer;
-      const open = () => {
-        clearTimeout(closeTimer);
-        trigger.setAttribute('aria-expanded', 'true');
-        dd.classList.add('is-open');
-      };
-      const close = () => {
-        clearTimeout(openTimer);
-        trigger.setAttribute('aria-expanded', 'false');
-        dd.classList.remove('is-open');
-      };
-      trigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        const expanded = trigger.getAttribute('aria-expanded') === 'true';
-        expanded ? close() : open();
-      });
-      dd.addEventListener('mouseenter', () => { openTimer = setTimeout(open, 60); });
-      dd.addEventListener('mouseleave', () => { closeTimer = setTimeout(close, 140); });
-      document.addEventListener('click', (e) => { if (!dd.contains(e.target)) close(); });
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-    });
-
-    // ---------- Sticky nav background on scroll ----------
-    const nav = document.getElementById('nav');
-    const onScroll = () => {
-      if (!nav) return;
-      if (window.scrollY > 24) nav.classList.add('is-stuck');
-      else nav.classList.remove('is-stuck');
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // ---------- Reveal-on-scroll (matches home, adds .is-in) ----------
-    if (!reduce && 'IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-in');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    } else {
-      document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-in'));
-    }
-
-    // ---------- Industry rail: highlight active section + smooth scroll offset ----------
-    const railLinks = Array.from(document.querySelectorAll('.ind-rail-link'));
-    const cards = railLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
-
-    if ('IntersectionObserver' in window && cards.length) {
-      const setActive = (id) => {
-        railLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
-      };
-      const railIO = new IntersectionObserver((entries) => {
-        // pick the entry closest to the top of the viewport that is visible
-        const visible = entries.filter(e => e.isIntersecting);
-        if (!visible.length) return;
-        visible.sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        setActive(visible[0].target.id);
-      }, { threshold: 0, rootMargin: '-180px 0px -60% 0px' });
-      cards.forEach(c => railIO.observe(c));
-    }
-
-  })();
-</script>
 
 </body>
 </html>

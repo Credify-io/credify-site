@@ -3003,3 +3003,517 @@
     color: var(--fg-60);
     text-shadow: none;
   }
+  /* ============================================================
+     E-DIMENSIONAL ADDITIONS
+     Utility layer (replaces the Tailwind CDN script), WebGL canvas
+     layer + 3D-mode overrides, tilt cards, FAQ, inline capture
+     form, sticky mobile CTA.
+     ============================================================ */
+
+  /* ---------- Utility layer (the only Tailwind classes the pages used) ---------- */
+  .hidden { display: none; }
+  .flex { display: flex; }
+  .items-center { align-items: center; }
+  .justify-between { justify-content: space-between; }
+  @media (min-width: 768px) {
+    .md\:flex { display: flex; }
+  }
+
+  /* ---------- WebGL canvas layer ---------- */
+  #gl-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+  /* 3D mode: sections go transparent so the particle field reads through the
+     whole page. Without .has-3d the original solid terrain stays - that IS
+     the static fallback, no extra styles needed. */
+  html.has-3d .hero,
+  html.has-3d .sec,
+  html.has-3d .partners,
+  html.has-3d .sol-hero { background: transparent; }
+  html.has-3d #why,
+  html.has-3d #process,
+  html.has-3d #clients { background: rgba(7, 8, 8, 0.55); }
+  html.has-3d .hero-mesh { display: none; }
+  html.has-3d .hero-overlay-h { opacity: 0.55; }
+
+  /* ---------- 3D tilt cards (CSS transforms driven by js/site.js) ---------- */
+  [data-tilt] {
+    transform-style: preserve-3d;
+    transition: transform 340ms cubic-bezier(0.25, 1, 0.35, 1);
+    will-change: transform;
+  }
+  [data-tilt].is-tilting { transition: transform 70ms linear; }
+
+  /* ---------- FAQ (details/summary, backs the FAQPage JSON-LD) ---------- */
+  .faq-list {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface-1);
+    overflow: hidden;
+    transition: border-color 220ms, background 220ms;
+  }
+  .faq-item[open] {
+    border-color: rgba(167, 243, 208, 0.35);
+    background: var(--surface-2);
+  }
+  .faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    color: #ffffff;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-chevron {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    color: var(--emerald);
+    transition: transform 220ms;
+  }
+  .faq-item[open] .faq-chevron { transform: rotate(180deg); }
+  .faq-body {
+    padding: 0 22px 20px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-70);
+    max-width: 65ch;
+  }
+
+  /* ---------- Shared form vocabulary (home capture form; mirrors Apply) ---------- */
+  .field { display: flex; flex-direction: column; gap: 9px; }
+  .field-label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px 6px;
+  }
+  .field-label .req { color: var(--emerald); font-size: 13px; line-height: 1; }
+  .field-label .opt { color: var(--fg-45); font-size: 12.5px; font-weight: 500; }
+  .field-input,
+  .field-select {
+    width: 100%;
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    background: linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 11px;
+    padding: 14px 16px;
+    min-height: 52px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      inset 0 0 0 1px rgba(0,0,0,0.20),
+      0 1px 0 rgba(255,255,255,0.04);
+    transition: border-color 200ms cubic-bezier(0.32, 0.72, 0, 1),
+                background 200ms cubic-bezier(0.32, 0.72, 0, 1),
+                box-shadow 200ms cubic-bezier(0.32, 0.72, 0, 1);
+    outline: none;
+  }
+  .field-input::placeholder { color: rgba(255,255,255,0.40); font-weight: 400; }
+  .field-input:hover,
+  .field-select:hover {
+    border-color: rgba(255,255,255,0.26);
+    background: linear-gradient(180deg, rgba(16, 19, 18, 0.96) 0%, rgba(19, 23, 21, 0.94) 100%);
+  }
+  .field-input:focus,
+  .field-select:focus {
+    border-color: rgba(167, 243, 208, 0.90);
+    background: linear-gradient(180deg, rgba(20, 26, 24, 0.96) 0%, rgba(12, 15, 14, 0.94) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      0 0 0 3px rgba(167, 243, 208, 0.22),
+      0 0 24px -6px rgba(167, 243, 208, 0.40);
+  }
+  .field-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23a7f3d0' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'><path d='M1 2l5 4 5-4'/></svg>"),
+      linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
+    background-repeat: no-repeat, no-repeat;
+    background-position: right 16px center, 0 0;
+    background-size: auto, 100% 100%;
+    padding-right: 44px;
+    cursor: pointer;
+  }
+  .field-select option { background: #0a0a0a; color: #ffffff; }
+
+  .btn-book {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    height: 52px;
+    padding: 0 28px;
+    border-radius: 9999px;
+    border: 1px solid rgba(167, 243, 208, 0.42);
+    background:
+      linear-gradient(180deg, rgba(167, 243, 208, 0.10) 0%, rgba(167, 243, 208, 0.04) 100%),
+      rgba(10, 10, 10, 0.6);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 12px;
+    transition:
+      transform 220ms cubic-bezier(0.32, 0.72, 0, 1),
+      border-color 220ms,
+      background 220ms,
+      box-shadow 220ms;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 6px 16px rgba(0, 0, 0, 0.40);
+  }
+  .btn-book:hover {
+    transform: translateY(-1px);
+    border-color: rgba(167, 243, 208, 0.65);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),
+      0 10px 22px rgba(0, 0, 0, 0.45),
+      0 0 28px -10px rgba(167, 243, 208, 0.40);
+  }
+  .btn-book .btn-icon {
+    width: 26px; height: 26px;
+    border-radius: 9999px;
+    background: rgba(167, 243, 208, 0.28);
+    box-shadow: inset 0 0 0 1px rgba(167, 243, 208, 0.6);
+    color: #ffffff;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn-book .btn-icon svg { width: 13px; height: 13px; }
+
+  /* ---------- Inline capture form (home, between calculator and closing CTA) ---------- */
+  .capture-shell {
+    position: relative;
+    max-width: 880px;
+    margin: 0 auto;
+    border-radius: 24px;
+    padding: clamp(28px, 4vw, 44px);
+    background: rgba(15, 18, 17, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    isolation: isolate;
+    box-shadow:
+      0 10px 34px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .capture-shell::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .capture-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+  @media (max-width: 700px) {
+    .capture-grid { grid-template-columns: 1fr; }
+  }
+  .capture-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+  .capture-meta {
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--fg-70);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .capture-meta svg { width: 13px; height: 13px; color: var(--emerald); }
+
+  /* ---------- Sticky mobile CTA bar (appears after the hero scrolls out) ---------- */
+  .sticky-cta {
+    position: fixed;
+    left: 12px; right: 12px; bottom: 12px;
+    z-index: 55;
+    display: none;
+    transform: translateY(130%);
+    transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .sticky-cta.is-visible { transform: translateY(0); }
+  @media (max-width: 720px) {
+    .sticky-cta { display: block; }
+  }
+  .sticky-cta a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    border-radius: 9999px;
+    background: rgba(10, 10, 10, 0.72);
+    border: 1px solid rgba(167, 243, 208, 0.45);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.5),
+      0 0 24px -8px rgba(167, 243, 208, 0.4);
+  }
+
+  /* ============================================================
+     LIVELINESS LAYER
+     Shimmering emphasis text, pulsing primary CTAs, cursor glow,
+     live field validation, quick-pick amount chips.
+     ============================================================ */
+
+  /* Emerald shimmer sweep on emphasized words */
+  .hero-h1 em, .sec-h2 em, .path-h2 em, .apply-banner-h2 em {
+    background: linear-gradient(100deg,
+      rgba(255,255,255,0.92) 0%,
+      rgba(255,255,255,0.92) 38%,
+      #a7f3d0 50%,
+      rgba(255,255,255,0.92) 62%,
+      rgba(255,255,255,0.92) 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: em-shimmer 5.5s ease-in-out infinite;
+  }
+  @keyframes em-shimmer {
+    0%, 55%  { background-position: 110% 0; }
+    100%     { background-position: -110% 0; }
+  }
+
+  /* Soft emerald breath on primary CTAs */
+  .btn-hero, .btn-book {
+    animation: cta-breathe 3.6s ease-in-out infinite;
+  }
+  @keyframes cta-breathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(167, 243, 208, 0.0), inset 0 1px 0 rgba(255,255,255,0.08); }
+    50%      { box-shadow: 0 0 34px -6px rgba(167, 243, 208, 0.45), inset 0 1px 0 rgba(255,255,255,0.10); }
+  }
+
+  /* Cursor-follow emerald glow (desktop only, sits between canvas and content) */
+  #cursor-glow {
+    position: fixed;
+    top: -260px; left: -260px;
+    width: 520px; height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(167, 243, 208, 0.07) 0%, rgba(167, 243, 208, 0) 65%);
+    pointer-events: none;
+    z-index: 2;
+    will-change: transform;
+  }
+  @media (pointer: coarse) {
+    #cursor-glow { display: none; }
+  }
+
+  /* Live field validation: emerald check when good, quiet red when not */
+  .field-input.is-valid,
+  .field-select.is-valid {
+    border-color: rgba(167, 243, 208, 0.55);
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23a7f3d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8.5l3.5 3.5L13 5'/></svg>"),
+      linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
+    background-repeat: no-repeat, no-repeat;
+    background-position: right 16px center, 0 0;
+    background-size: auto, 100% 100%;
+  }
+  .field-select.is-valid {
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23a7f3d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 8.5l3.5 3.5L13 5'/></svg>"),
+      linear-gradient(180deg, rgba(8, 10, 9, 0.96) 0%, rgba(12, 14, 13, 0.94) 100%);
+    background-position: right 44px center, 0 0;
+  }
+  .field-input.is-invalid {
+    border-color: rgba(248, 113, 113, 0.55);
+  }
+  .field-hint {
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    color: rgba(248, 113, 113, 0.85);
+    margin: 4px 0 0;
+    display: none;
+  }
+  .field-input.is-invalid ~ .field-hint { display: block; }
+
+  /* Quick-pick amount chips (home capture form) */
+  .amount-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .amount-chip {
+    cursor: pointer;
+    padding: 12px 16px;
+    border-radius: 9999px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.18) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    transition: border-color 200ms, background 200ms, color 200ms, transform 200ms;
+  }
+  .amount-chip:hover {
+    border-color: rgba(255,255,255,0.30);
+    transform: translateY(-1px);
+  }
+  .amount-chip.is-active {
+    background: linear-gradient(180deg, rgba(167, 243, 208, 0.20), rgba(167, 243, 208, 0.05));
+    border-color: rgba(167, 243, 208, 0.60);
+    color: var(--emerald);
+    box-shadow: 0 0 24px -6px rgba(167, 243, 208, 0.55);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-h1 em, .sec-h2 em, .path-h2 em, .apply-banner-h2 em { animation: none; }
+    .btn-hero, .btn-book { animation: none; }
+    #cursor-glow { display: none; }
+  }
+
+  /* ============================================================
+     TASTE PASS (palette locked)
+     Off-black base, double-bezel container rings, button-in-button
+     hover kinetics, tactile press states, staggered dropdown reveal,
+     marquee edge masks, cursor spotlight on cards.
+     ============================================================ */
+
+  /* OLED off-black: reads identical, kills the dead #000 flatness */
+  :root { --background: #050505; }
+
+  /* Machined double-bezel rings on premium containers (concentric
+     hairline / tray band / outer hairline) */
+  .capture-shell,
+  .compare-card,
+  .calc-inputs,
+  .calc-result,
+  .instrument-shelf {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.10),
+      0 0 0 7px rgba(255, 255, 255, 0.03),
+      0 0 0 8px rgba(255, 255, 255, 0.08),
+      0 28px 56px -28px rgba(0, 0, 0, 0.72),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  .faq-item[open] {
+    box-shadow:
+      0 0 0 1px rgba(167, 243, 208, 0.16),
+      0 0 0 6px rgba(255, 255, 255, 0.03),
+      0 0 0 7px rgba(255, 255, 255, 0.07),
+      0 20px 44px -24px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Button-in-button kinetics: nested icon circle shifts diagonally,
+     whole control presses physically on :active */
+  .btn-icon {
+    transition:
+      transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+      background 220ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .hero-cta-main:hover .btn-icon,
+  .btn-book:hover .btn-icon,
+  .nav-menu-help-cta:hover svg {
+    transform: translate(2px, -1px) scale(1.06);
+  }
+  .btn:active,
+  .btn-book:active,
+  .amount-chip:active,
+  .calc-pill:active,
+  .slot-btn:active,
+  .day-tile:active,
+  .instrument-row:active {
+    transform: scale(0.98);
+  }
+
+  /* Services mega-menu: staggered mask reveal per column */
+  .nav-menu-col,
+  .nav-menu-help,
+  .nav-menu-foot {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 480ms cubic-bezier(0.32, 0.72, 0, 1),
+      transform 480ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .nav-dropdown.is-open .nav-menu-col,
+  .nav-dropdown.is-open .nav-menu-help,
+  .nav-dropdown.is-open .nav-menu-foot {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .nav-dropdown.is-open .nav-menu-col:nth-child(1) { transition-delay: 50ms; }
+  .nav-dropdown.is-open .nav-menu-col:nth-child(2) { transition-delay: 110ms; }
+  .nav-dropdown.is-open .nav-menu-col:nth-child(3) { transition-delay: 170ms; }
+  .nav-dropdown.is-open .nav-menu-help { transition-delay: 230ms; }
+  .nav-dropdown.is-open .nav-menu-foot { transition-delay: 290ms; }
+
+  /* Partners marquee: dissolve at the edges, pause under the cursor */
+  .partners-rail {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 10%, #000 90%, transparent 100%);
+  }
+  .partners-rail:hover { animation-play-state: paused; }
+
+  /* Cursor spotlight: emerald light pools under the pointer on tilt cards */
+  .card[data-tilt]::after,
+  .quote-card[data-tilt]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(167, 243, 208, 0.09), transparent 65%);
+    opacity: 0;
+    transition: opacity 420ms cubic-bezier(0.32, 0.72, 0, 1);
+    z-index: 3;
+  }
+  .card[data-tilt]:hover::after,
+  .quote-card[data-tilt]:hover::after {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-menu-col, .nav-menu-help, .nav-menu-foot {
+      opacity: 1; transform: none; transition: none;
+    }
+  }
