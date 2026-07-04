@@ -302,30 +302,29 @@
     }
   }
 
-  // ---------- Scroll morph: sections scale/slide/fade as they travel ----------
-  // Continuous scroll-driven transform (not a one-shot reveal): each section
-  // eases up to full size/opacity as it approaches viewport center and
-  // recedes as it leaves. Skipped for reduced motion.
+  // ---------- Scroll morph: sections fade as they travel ----------
+  // Opacity-only, two-pass (all layout reads, then all style writes).
+  // Transforms were removed deliberately: moving a section shifts the
+  // backdrop sample region of every glass element inside it, forcing
+  // dozens of backdrop-filter re-blurs per scroll frame (the source of
+  // the scroll jank). Opacity composites without re-blurring.
   if (!reduce && page === 'home') {
     const morphs = Array.from(document.querySelectorAll('main > section'))
       .filter(s => !s.classList.contains('hero'));
-    morphs.forEach(s => { s.style.willChange = 'transform, opacity'; });
     let mTick = false;
     const morphUpdate = () => {
       const vh = window.innerHeight;
-      morphs.forEach((sec) => {
-        const r = sec.getBoundingClientRect();
-        if (r.bottom < -240 || r.top > vh + 240) return; // offscreen, skip work
+      // read pass
+      const rects = morphs.map(sec => sec.getBoundingClientRect());
+      // write pass
+      morphs.forEach((sec, i) => {
+        const r = rects[i];
+        if (r.bottom < -240 || r.top > vh + 240) return; // offscreen
         const c = r.top + r.height / 2;
-        const d = (c - vh / 2) / (vh / 2 + r.height / 2); // signed distance, -1..1
+        const d = (c - vh / 2) / (vh / 2 + r.height / 2);
         const a = Math.min(1, Math.abs(d));
         const v = 1 - a * a;
-        const scale = 0.94 + 0.06 * v;
-        const ty = d * 48;
-        sec.style.transform =
-          'perspective(1200px) translateY(' + ty.toFixed(1) + 'px) scale(' +
-          scale.toFixed(3) + ') rotateX(' + (d * -3).toFixed(2) + 'deg)';
-        sec.style.opacity = (0.35 + 0.65 * v).toFixed(3);
+        sec.style.opacity = (0.45 + 0.55 * v).toFixed(3);
       });
       mTick = false;
     };

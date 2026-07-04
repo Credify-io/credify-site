@@ -1769,7 +1769,8 @@
     position: fixed; inset: 0; z-index: 60;
     pointer-events: none;
     opacity: 0.035;
-    mix-blend-mode: overlay;
+    /* blend removed: overlay-blending above the per-frame WebGL canvas
+       forced a full-viewport blend pass every frame */
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 0'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
   }
 
@@ -3046,9 +3047,8 @@
   [data-tilt] {
     transform-style: preserve-3d;
     transition: transform 340ms cubic-bezier(0.25, 1, 0.35, 1);
-    will-change: transform;
   }
-  [data-tilt].is-tilting { transition: transform 70ms linear; }
+  [data-tilt].is-tilting { transition: transform 70ms linear; will-change: transform; }
 
   /* ---------- FAQ (details/summary, backs the FAQPage JSON-LD) ---------- */
   .faq-list {
@@ -3304,7 +3304,7 @@
      ============================================================ */
 
   /* Emerald shimmer sweep on emphasized words */
-  .hero-h1 em, .sec-h2 em, .path-h2 em, .apply-banner-h2 em {
+  .hero-h1 em, .apply-banner-h2 em {
     background: linear-gradient(100deg,
       rgba(255,255,255,0.92) 0%,
       rgba(255,255,255,0.92) 38%,
@@ -3405,7 +3405,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-h1 em, .sec-h2 em, .path-h2 em, .apply-banner-h2 em { animation: none; }
+    .hero-h1 em, .apply-banner-h2 em { animation: none; }
     .btn-hero, .btn-book { animation: none; }
     #cursor-glow { display: none; }
   }
